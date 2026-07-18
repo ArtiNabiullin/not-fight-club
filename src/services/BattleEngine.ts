@@ -1,20 +1,32 @@
-import type { Battle, Enemy, Player, BattleMove, DamageResult } from "../types";
+import type {
+  Battle,
+  Enemy,
+  Player,
+  BattleMove,
+  DamageResult,
+  HitResult,
+} from "../types";
+
+import type { Zone } from "../types";
+
 import { isCriticalHit } from "../utils/critical";
 import { getRandomItem, getRandomUniqueItems } from "../utils/random";
 import { CRITICAL_MULTIPLIER } from "../constants/battle";
 
 export class BattleEngine {
   private battle: Battle | null = null;
+  private player: Player;
+  private enemies: Enemy[];
 
-  constructor(
-    private player: Player,
-    private enemies: Enemy[],
-  ) {}
+  constructor(player: Player, enemies: Enemy[]) {
+    this.player = player;
+    this.enemies = enemies;
+  }
 
   public startBattle(): Battle {
     const enemy = getRandomItem(this.enemies);
 
-    const battle: Battle = {
+    this.battle = {
       player: this.player,
       enemy,
 
@@ -28,9 +40,7 @@ export class BattleEngine {
       isFinished: false,
     };
 
-    this.battle = battle;
-
-    return battle;
+    return this.battle;
   }
 
   public resolveTurn(move: BattleMove): Battle {
@@ -40,21 +50,23 @@ export class BattleEngine {
 
     const enemyMove = this.createEnemyMove();
 
-    const playerDamage = this.calculateDamage(
+    const playerResult = this.calculateDamage(
       this.battle.player,
       move,
-      this.battle.enemy,
       enemyMove,
     );
 
-    const enemyDamage = this.calculateDamage(
+    const enemyResult = this.calculateDamage(
       this.battle.enemy,
       enemyMove,
-      this.battle.player,
       move,
     );
 
-    this.applyDamage(playerDamage, enemyDamage);
+    this.applyDamage(playerResult, enemyResult);
+
+    this.createLogs(this.battle.player, this.battle.enemy, playerResult);
+
+    this.createLogs(this.battle.enemy, this.battle.player, enemyResult);
 
     this.battle.turn++;
 
@@ -70,48 +82,50 @@ export class BattleEngine {
 
     const enemy = this.battle.enemy;
 
-    if (enemy.attackProfile.length < enemy.attackCount) {
-      throw new Error("Enemy attack profile is too small");
-    }
+    return {
+      attackZones: getRandomUniqueItems(enemy.attackProfile, enemy.attackCount),
 
-    if (enemy.defenseProfile.length < enemy.defenseCount) {
-      throw new Error("Enemy defense profile is too small");
-    }
-
-    const attackZones = getRandomUniqueItems(
-      enemy.attackProfile,
-      enemy.attackCount,
-    );
-
-    const defenseZones = getRandomUniqueItems(
-      enemy.defenseProfile,
-      enemy.defenseCount,
-    );
-
-    return { attackZones, defenseZones };
+      defenseZones: getRandomUniqueItems(
+        enemy.defenseProfile,
+        enemy.defenseCount,
+      ),
+    };
   }
 
   private calculateDamage(
     attacker: Player | Enemy,
     attackerMove: BattleMove,
-
-    defender: Player | Enemy,
     defenderMove: BattleMove,
   ): DamageResult {
-    const critical = isCriticalHit();
-
-    let damage = 0;
-    let isBlocked = false;
+    const hits: HitResult[] = [];
 
     for (const zone of attackerMove.attackZones) {
-      const blocked = defenderMove.defenseZones.includes(zone);
+      const hit = this.calculateHit(attacker, zone, defenderMove);
 
-      if (blocked && !critical) {
-        isBlocked = true;
-        continue;
-      }
+      hits.push(hit);
+    }
 
-      damage += attacker.damage;
+    const totalDamage = hits.reduce((sum, hit) => sum + hit.damage, 0);
+
+    return {
+      hits,
+      totalDamage,
+    };
+  }
+
+  private calculateHit(
+    attacker: Player | Enemy,
+    zone: Zone,
+    defenderMove: BattleMove,
+  ): HitResult {
+    const critical = isCriticalHit();
+
+    const blocked = defenderMove.defenseZones.includes(zone);
+
+    let damage = 0;
+
+    if (!blocked || critical) {
+      damage = attacker.damage;
     }
 
     if (critical) {
@@ -119,9 +133,13 @@ export class BattleEngine {
     }
 
     return {
+      zone,
+
       damage,
+
       isCritical: critical,
-      isBlocked,
+
+      isBlocked: blocked,
     };
   }
 
@@ -135,16 +153,58 @@ export class BattleEngine {
 
     this.battle.enemyHp = Math.max(
       0,
-      this.battle.enemyHp - playerResult.damage,
+      this.battle.enemyHp - playerResult.totalDamage,
     );
 
     this.battle.playerHp = Math.max(
       0,
-      this.battle.playerHp - enemyResult.damage,
+      this.battle.playerHp - enemyResult.totalDamage,
     );
   }
 
-  private addLog() {}
+  private createLogs(
+    attacker: Player | Enemy,
+    target: Player | Enemy,
+    result: DamageResult,
+  ): void {
+    if (!this.battle) {
+      throw new Error("Battle has not started");
+    }
 
-  private finishBattle() {}
+    for (const hit of result.hits) {
+      this.battle.log.push({
+        attacker,
+
+        target,
+
+        zone: hit.zone,
+
+        damage: hit.damage,
+
+        isCritical: hit.isCritical,
+
+        isBlocked: hit.isBlocked,
+      });
+    }
+  }
+
+  private finishBattle(): void {
+    if (!this.battle) {
+      throw new Error("Battle has not started");
+    }
+
+    if (this.battle.enemyHp === 0) {
+      this.battle.player.wins++;
+
+      this.battle.isFinished = true;
+
+      return;
+    }
+
+    if (this.battle.playerHp === 0) {
+      this.battle.player.losses++;
+
+      this.battle.isFinished = true;
+    }
+  }
 }

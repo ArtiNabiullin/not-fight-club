@@ -1,5 +1,6 @@
+import type { HitResult } from "./HitResult";
+
 export interface DamageResult {
-  damage: number;
-  isCritical: boolean;
-  isBlocked: boolean;
+  hits: HitResult[];
+  totalDamage: number;
 }
