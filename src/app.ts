@@ -1,6 +1,7 @@
 import { BattleEngine } from "./services/BattleEngine";
 import { enemies } from "./data/enemies";
 import { Zone } from "./types";
+import { renderBattle } from "./components/BattleView";
 import type { Player } from "./types";
 
 export class App {
@@ -19,6 +20,10 @@ export class App {
     const engine = new BattleEngine(player, enemies);
 
     const battle = engine.startBattle();
+
+    const battleView = renderBattle(battle);
+
+    document.body.append(battleView);
 
     console.log("START BATTLE", battle);
 
