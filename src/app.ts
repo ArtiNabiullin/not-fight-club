@@ -33,10 +33,16 @@ export class App {
       updateBattleView();
     };
 
+    const handleNewBattle = () => {
+      currentBattle = engine.startBattle();
+
+      updateBattleView();
+    };
+
     const updateBattleView = () => {
       root.innerHTML = "";
 
-      root.append(renderBattle(currentBattle, handleAttack));
+      root.append(renderBattle(currentBattle, handleAttack, handleNewBattle));
     };
 
     updateBattleView();

@@ -11,7 +11,11 @@ export function createBattleControls(onAttack: (move: BattleMove) => void) {
   let attackZones: Zone[] = [];
   let defenseZones: Zone[] = [];
 
+  const attackButtons: HTMLButtonElement[] = [];
+  const defenseButtons: HTMLButtonElement[] = [];
+
   const attackButton = document.createElement("button");
+  attackButton.className = "attack-button";
   attackButton.textContent = "ATTACK";
 
   attackButton.onclick = () => {
@@ -27,7 +31,7 @@ export function createBattleControls(onAttack: (move: BattleMove) => void) {
   };
 
   const attackTitle = document.createElement("h3");
-  attackTitle.textContent = "Attack:";
+  attackTitle.textContent = `Attack: 0/${MAX_ATTACK}`;
 
   container.append(attackTitle);
 
@@ -46,18 +50,30 @@ export function createBattleControls(onAttack: (move: BattleMove) => void) {
     button.onclick = () => {
       if (!attackZones.includes(zone) && attackZones.length < MAX_ATTACK) {
         attackZones.push(zone);
+
+        attackTitle.textContent = `Attack: ${attackZones.length}/${MAX_ATTACK}`;
+
+        button.classList.add("selected");
       }
 
-      button.classList.add("selected");
+      if (attackZones.length === MAX_ATTACK) {
+        attackButtons.forEach((btn) => {
+          if (!btn.classList.contains("selected")) {
+            btn.disabled = true;
+          }
+        });
+      }
 
       console.log("Attack:", attackZones);
     };
 
     attackContainer.append(button);
+
+    attackButtons.push(button);
   });
 
   const defenseTitle = document.createElement("h3");
-  defenseTitle.textContent = "Defense:";
+  defenseTitle.textContent = `Defense: 0/${MAX_DEFENSE}`;
 
   container.append(defenseTitle);
 
@@ -74,14 +90,26 @@ export function createBattleControls(onAttack: (move: BattleMove) => void) {
     button.onclick = () => {
       if (!defenseZones.includes(zone) && defenseZones.length < MAX_DEFENSE) {
         defenseZones.push(zone);
+
+        defenseTitle.textContent = `Defense: ${defenseZones.length}/${MAX_DEFENSE}`;
+
+        button.classList.add("selected");
       }
 
-      button.classList.add("selected");
+      if (defenseZones.length === MAX_DEFENSE) {
+        defenseButtons.forEach((btn) => {
+          if (!btn.classList.contains("selected")) {
+            btn.disabled = true;
+          }
+        });
+      }
 
       console.log("Defense:", defenseZones);
     };
 
     defenseContainer.append(button);
+
+    defenseButtons.push(button);
   });
 
   container.append(attackButton);
