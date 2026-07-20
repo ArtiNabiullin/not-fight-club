@@ -17,7 +17,7 @@ export function renderBattle(
 
   const playerCard = createFighterCard(battle.player, battle.playerHp);
 
-  fightersContainer.append(enemyCard, playerCard);
+  fightersContainer.append(playerCard, enemyCard);
 
   const log = createBattleLog(battle.log);
 

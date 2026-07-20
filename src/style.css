@@ -103,3 +103,50 @@
 .battle-controls button:hover {
   background: #555;
 }
+
+/**/
+
+.fighters-container {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-bottom: 30px;
+}
+
+.fighter-card {
+  width: 220px;
+
+  background: #222;
+
+  border: 1px solid #444;
+
+  border-radius: 10px;
+
+  padding: 20px;
+
+  text-align: center;
+
+  color: #ddd;
+}
+
+.fighter-card img {
+  width: 200px;
+  height: 200px;
+
+  border-radius: 10%;
+
+  margin-bottom: 10px;
+}
+
+.fighter-card h2 {
+  margin: 10px 0;
+  color: white;
+}
+
+.player-card {
+  border-color: #666;
+}
+
+.enemy-card {
+  border-color: #333;
+}

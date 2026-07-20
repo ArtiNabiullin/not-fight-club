@@ -1,10 +1,13 @@
 import type { Enemy } from "../types";
 import { Zone } from "../types";
+import spider from "../assets/img/spider.jpg";
+import troll from "../assets/img/troll.jfif";
+import knight from "../assets/img/knight.jfif";
 
 export const enemies: Enemy[] = [
   {
     name: "Spider",
-    avatar: "./assets/spider.png",
+    avatar: spider,
     maxHp: 100,
     damage: 10,
     attackProfile: [Zone.Head, Zone.Body, Zone.Legs],
@@ -14,7 +17,7 @@ export const enemies: Enemy[] = [
   },
   {
     name: "Troll",
-    avatar: "./assets/troll.png",
+    avatar: troll,
     maxHp: 130,
     damage: 20,
     attackProfile: [Zone.Body],
@@ -24,7 +27,7 @@ export const enemies: Enemy[] = [
   },
   {
     name: "Knight",
-    avatar: "./assets/knight.png",
+    avatar: knight,
     maxHp: 150,
     damage: 15,
     attackProfile: [Zone.Head, Zone.Belly],
