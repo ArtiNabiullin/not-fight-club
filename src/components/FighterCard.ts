@@ -1,4 +1,5 @@
 import type { Player, Enemy } from "../types";
+import { createHealthBar } from "./HealthBar";
 
 export function createFighterCard(fighter: Player | Enemy, hp: number) {
   const card = document.createElement("div");
@@ -12,8 +13,10 @@ export function createFighterCard(fighter: Player | Enemy, hp: number) {
   name.textContent = fighter.name;
   card.append(name);
 
-  const health = document.createElement("p");
-  health.textContent = `HP: ${hp}`;
+  const maxHp = "maxHP" in fighter ? fighter.maxHP : fighter.maxHp;
+
+  const health = createHealthBar(hp, maxHp);
+
   card.append(health);
 
   return card;
