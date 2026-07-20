@@ -1,6 +1,7 @@
 import type { Battle, BattleMove } from "../types";
 import { createFighterCard } from "./FighterCard";
 import { createBattleControls } from "./BattleControls";
+import { createBattleLog } from "./BattleLog";
 
 export function renderBattle(
   battle: Battle,
@@ -14,6 +15,10 @@ export function renderBattle(
   const playerCard = createFighterCard(battle.player, battle.playerHp);
 
   container.append(enemyCard, playerCard);
+
+  const log = createBattleLog(battle.log);
+
+  container.append(enemyCard, playerCard, log);
 
   const controls = createBattleControls(onAttack);
 
