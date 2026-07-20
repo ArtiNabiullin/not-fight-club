@@ -31,6 +31,11 @@ export function createBattleControls(onAttack: (move: BattleMove) => void) {
 
   container.append(attackTitle);
 
+  const attackContainer = document.createElement("div");
+  attackContainer.className = "attack-zones";
+
+  container.append(attackContainer);
+
   const zones = [Zone.Head, Zone.Neck, Zone.Body, Zone.Belly, Zone.Legs];
 
   zones.forEach((zone) => {
@@ -43,16 +48,23 @@ export function createBattleControls(onAttack: (move: BattleMove) => void) {
         attackZones.push(zone);
       }
 
+      button.classList.add("selected");
+
       console.log("Attack:", attackZones);
     };
 
-    container.append(button);
+    attackContainer.append(button);
   });
 
   const defenseTitle = document.createElement("h3");
   defenseTitle.textContent = "Defense:";
 
   container.append(defenseTitle);
+
+  const defenseContainer = document.createElement("div");
+  defenseContainer.className = "defense-zones";
+
+  container.append(defenseContainer);
 
   zones.forEach((zone) => {
     const button = document.createElement("button");
@@ -64,10 +76,12 @@ export function createBattleControls(onAttack: (move: BattleMove) => void) {
         defenseZones.push(zone);
       }
 
+      button.classList.add("selected");
+
       console.log("Defense:", defenseZones);
     };
 
-    container.append(button);
+    defenseContainer.append(button);
   });
 
   container.append(attackButton);

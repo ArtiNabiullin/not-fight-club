@@ -10,15 +10,18 @@ export function renderBattle(
   const container = document.createElement("div");
   container.className = "battle-container";
 
+  const fightersContainer = document.createElement("div");
+  fightersContainer.className = "fighters-container";
+
   const enemyCard = createFighterCard(battle.enemy, battle.enemyHp);
 
   const playerCard = createFighterCard(battle.player, battle.playerHp);
 
-  container.append(enemyCard, playerCard);
+  fightersContainer.append(enemyCard, playerCard);
 
   const log = createBattleLog(battle.log);
 
-  container.append(enemyCard, playerCard, log);
+  container.append(fightersContainer, log);
 
   const controls = createBattleControls(onAttack);
 

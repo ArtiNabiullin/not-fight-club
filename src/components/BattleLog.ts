@@ -4,6 +4,18 @@ export function createBattleLog(log: LogEntry[]) {
   const container = document.createElement("div");
   container.className = "battle-log";
 
+  const title = document.createElement("h3");
+  title.textContent = "Battle Log:";
+  container.append(title);
+
+  if (log.length === 0) {
+    const item = document.createElement("div");
+    item.className = "log-message";
+    item.textContent = "Waiting for first turn...";
+
+    container.append(item);
+  }
+
   log.forEach((entry) => {
     const item = document.createElement("div");
     item.className = "log-entry";
@@ -27,6 +39,18 @@ export function createBattleLog(log: LogEntry[]) {
     damage.className = "log-damage";
     damage.textContent = ` ${entry.damage} `;
 
+    const result = document.createElement("span");
+
+    if (entry.isCritical) {
+      result.className = "log-critical";
+      result.textContent = " - CRITICAL!";
+    } else if (entry.isBlocked) {
+      result.className = "log-blocked";
+      result.textContent = " - BLOCKED!";
+    } else {
+      result.textContent = "";
+    }
+
     item.append(
       attacker,
       attacks,
@@ -36,6 +60,7 @@ export function createBattleLog(log: LogEntry[]) {
       document.createTextNode(" for "),
       damage,
       document.createTextNode(" damage"),
+      result,
     );
 
     container.append(item);
