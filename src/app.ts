@@ -1,8 +1,8 @@
 import { BattleEngine } from "./services/BattleEngine";
 import { enemies } from "./data/enemies";
-import { Zone } from "./types";
 import { renderBattle } from "./components/BattleView";
 import type { Player } from "./types";
+import type { BattleMove } from "./types";
 
 export class App {
   init(): void {
@@ -21,18 +21,24 @@ export class App {
 
     const battle = engine.startBattle();
 
-    const battleView = renderBattle(battle);
+    let currentBattle = battle;
 
-    document.body.append(battleView);
+    const root = document.createElement("div");
 
-    console.log("START BATTLE", battle);
+    document.body.append(root);
 
-    const result = engine.resolveTurn({
-      attackZones: [Zone.Head, Zone.Body],
+    const handleAttack = (move: BattleMove) => {
+      currentBattle = engine.resolveTurn(move);
 
-      defenseZones: [Zone.Legs, Zone.Body],
-    });
+      updateBattleView();
+    };
 
-    console.log("AFTER TURN", result);
+    const updateBattleView = () => {
+      root.innerHTML = "";
+
+      root.append(renderBattle(currentBattle, handleAttack));
+    };
+
+    updateBattleView();
   }
 }

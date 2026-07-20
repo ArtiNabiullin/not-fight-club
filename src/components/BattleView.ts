@@ -1,7 +1,11 @@
-import type { Battle } from "../types";
+import type { Battle, BattleMove } from "../types";
 import { createFighterCard } from "./FighterCard";
+import { createBattleControls } from "./BattleControls";
 
-export function renderBattle(battle: Battle) {
+export function renderBattle(
+  battle: Battle,
+  onAttack: (move: BattleMove) => void,
+) {
   const container = document.createElement("div");
   container.className = "battle-container";
 
@@ -10,6 +14,10 @@ export function renderBattle(battle: Battle) {
   const playerCard = createFighterCard(battle.player, battle.playerHp);
 
   container.append(enemyCard, playerCard);
+
+  const controls = createBattleControls(onAttack);
+
+  container.append(controls);
 
   return container;
 }

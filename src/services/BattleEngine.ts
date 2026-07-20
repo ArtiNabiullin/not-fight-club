@@ -43,6 +43,7 @@ export class BattleEngine {
     return this.battle;
   }
 
+
   public resolveTurn(move: BattleMove): Battle {
     if (!this.battle) {
       throw new Error("Battle has not started");
