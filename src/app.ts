@@ -2,6 +2,7 @@ import { BattleEngine } from "./services/BattleEngine";
 import { enemies } from "./data/enemies";
 import { renderBattle } from "./components/BattleView";
 import { renderRegistration } from "./components/RegistrationView";
+import { renderHome } from "./components/HomeView";
 import type { Player } from "./types";
 import type { BattleMove } from "./types";
 
@@ -16,6 +17,12 @@ export class App {
     const root = document.createElement("div");
 
     document.body.append(root);
+
+    const showScreen = (screen: HTMLElement) => {
+      root.innerHTML = "";
+
+      root.append(screen);
+    };
 
     const handleAttack = (move: BattleMove) => {
       currentBattle = engine.resolveTurn(move);
@@ -35,6 +42,12 @@ export class App {
       root.append(renderBattle(currentBattle, handleAttack, handleNewBattle));
     };
 
+    const handleStartBattle = () => {
+      currentBattle = engine.startBattle();
+
+      updateBattleView();
+    };
+
     root.append(
       renderRegistration((name) => {
         ((player = {
@@ -46,6 +59,8 @@ export class App {
           damage: 20,
         }),
           (engine = new BattleEngine(player, enemies)));
+
+        showScreen(renderHome(player.name, handleStartBattle));
 
         currentBattle = engine.startBattle();
       }),
