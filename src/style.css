@@ -160,3 +160,23 @@
 
   color: #882828;
 }
+
+.avatar-button {
+  width: 200px;
+  height: 200px;
+
+  background: #222;
+
+  border: 1px solid #555;
+
+  border-radius: 8px;
+
+  cursor: pointer;
+}
+
+.avatar-button img {
+  width: 160px;
+  height: 160px;
+
+  border-radius: 1cqb;
+}

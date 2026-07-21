@@ -1,4 +1,8 @@
-export function renderHome(playerName: string, onStartBattle: () => void) {
+export function renderHome(
+  playerName: string,
+  onStartBattle: () => void,
+  onCharacter: () => void,
+) {
   const container = document.createElement("div");
   container.className = "home";
 
@@ -11,11 +15,18 @@ export function renderHome(playerName: string, onStartBattle: () => void) {
   const startButton = document.createElement("button");
   startButton.textContent = "START BATTLE";
 
+  const characterButton = document.createElement("button");
+  characterButton.textContent = "CHARACTER";
+
   startButton.onclick = () => {
     onStartBattle();
   };
 
-  container.append(title, welcome, startButton);
+  characterButton.onclick = () => {
+    onCharacter();
+  };
+
+  container.append(title, welcome, startButton, characterButton);
 
   return container;
 }

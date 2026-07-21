@@ -4,6 +4,7 @@ import { renderBattle } from "./components/BattleView";
 import { renderRegistration } from "./components/RegistrationView";
 import { renderHome } from "./components/HomeView";
 import { savePlayer, getPlayer } from "./services/Storage";
+import { renderCharacter } from "./components/CharacterView";
 import type { Player, BattleMove, Battle } from "./types";
 
 export class App {
@@ -55,7 +56,23 @@ export class App {
 
       engine = new BattleEngine(player, enemies);
 
-      showScreen(renderHome(player.name, handleStartBattle));
+      showScreen(renderHome(player.name, handleStartBattle, handleCharacter));
+    };
+
+    const handleBackHome = () => {
+      showScreen(renderHome(player.name, handleStartBattle, handleCharacter));
+    };
+
+    const handleChangeAvatar = (avatar: string) => {
+      player.avatar = avatar;
+
+      savePlayer(player);
+
+      showScreen(renderCharacter(player, handleChangeAvatar, handleBackHome));
+    };
+
+    const handleCharacter = () => {
+      showScreen(renderCharacter(player, handleChangeAvatar, handleBackHome));
     };
 
     if (savedPlayer) {
@@ -76,7 +93,9 @@ export class App {
 
           engine = new BattleEngine(player, enemies);
 
-          showScreen(renderHome(player.name, handleStartBattle));
+          showScreen(
+            renderHome(player.name, handleStartBattle, handleCharacter),
+          );
         }),
       );
     }
