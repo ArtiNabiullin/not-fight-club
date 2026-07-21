@@ -12,6 +12,7 @@ export function renderCharacter(
   container.className = "character";
 
   const avatar = document.createElement("img");
+  avatar.className = "avatar";
   avatar.src = player.avatar;
 
   const name = document.createElement("h2");

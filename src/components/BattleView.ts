@@ -7,6 +7,7 @@ export function renderBattle(
   battle: Battle,
   onAttack: (move: BattleMove) => void,
   onNewBattle: () => void,
+  onMainMenu: () => void,
 ) {
   const container = document.createElement("div");
   container.className = "battle-container";
@@ -28,6 +29,14 @@ export function renderBattle(
   container.append(fightersContainer, log);
 
   const controls = createBattleControls(onAttack);
+
+  const menuButton = document.createElement("button");
+  menuButton.className = "main-menu-button";
+  menuButton.textContent = "MAIN MENU";
+
+  menuButton.onclick = () => {
+    onMainMenu();
+  };
 
   if (battle.isFinished) {
     const button = controls.querySelector<HTMLButtonElement>(".attack-button");
@@ -52,7 +61,7 @@ export function renderBattle(
     controls.append(newBattleButton);
   }
 
-  container.append(controls);
+  container.append(controls, menuButton);
 
   return container;
 }

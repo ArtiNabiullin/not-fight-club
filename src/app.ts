@@ -16,7 +16,7 @@ export class App {
 
     let currentBattle: Battle;
 
-    let isResultSaved = false;
+    let lastFinishedBattle: Battle | null = null;
 
     const root = document.createElement("div");
 
@@ -31,21 +31,19 @@ export class App {
     };
 
     const updatePlayerStats = () => {
-      {
-        if (isResultSaved) {
-          return;
-        }
-
-        if (currentBattle.playerHp === 0) {
-          player.losses += 1;
-        }
-
-        if (currentBattle.enemyHp === 0) {
-          player.wins += 1;
-        }
+      if (lastFinishedBattle === currentBattle) {
+        return;
       }
 
-      isResultSaved = true;
+      if (currentBattle.playerHp === 0) {
+        player.losses += 1;
+      }
+
+      if (currentBattle.enemyHp === 0) {
+        player.wins += 1;
+      }
+
+      lastFinishedBattle = currentBattle;
 
       savePlayer(player);
     };
@@ -60,6 +58,17 @@ export class App {
       updateBattleView();
     };
 
+    const handleMainMenu = () => {
+      showScreen(
+        renderHome(
+          player.name,
+          handleStartBattle,
+          handleCharacter,
+          handleSettings,
+        ),
+      );
+    };
+
     const handleNewBattle = () => {
       currentBattle = engine.startBattle();
 
@@ -69,12 +78,17 @@ export class App {
     const updateBattleView = () => {
       root.innerHTML = "";
 
-      root.append(renderBattle(currentBattle, handleAttack, handleNewBattle));
+      root.append(
+        renderBattle(
+          currentBattle,
+          handleAttack,
+          handleNewBattle,
+          handleMainMenu,
+        ),
+      );
     };
 
     const handleStartBattle = () => {
-      isResultSaved = false;
-
       currentBattle = engine.startBattle();
 
       updateBattleView();

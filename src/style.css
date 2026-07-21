@@ -1,120 +1,151 @@
-.battle-log {
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+
+  background: #111;
+
+  color: #ddd;
+
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+#app,
+body > div {
+  width: 100%;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: flex-start;
+
+  padding-top: 10px;
+}
+
+/* */
+
+.registration,
+.home,
+.character,
+.settings {
   width: 500px;
-  min-height: 220px;
 
-  color: #fff;
+  padding: 40px;
 
-  background: #222;
+  text-align: center;
+
+  background: #1b1b1b;
 
   border: 1px solid #444;
 
-  border-radius: 8px;
+  border-radius: 12px;
 
-  padding: 15px;
+  box-shadow: 0 0 20px #000;
 }
 
-.log-entry {
-  margin-bottom: 8px;
-  color: #ddd;
+/* */
+
+.logo {
+  display: block;
+
+  margin: 0 auto 25px;
+
+  width: 180px;
 }
 
-.log-attacker {
-  color: #fff;
-  font-weight: bold;
-}
+h1 {
+  margin-bottom: 25px;
 
-.log-target {
-  color: #aaa;
-}
-
-.log-zone {
-  color: #777;
-  font-style: italic;
-}
-
-.log-damage {
-  color: #fff;
-  font-weight: bold;
-}
-
-.log-critical {
-  color: rgb(139, 28, 28);
-  font-weight: bold;
-}
-
-.log-blocked {
-  color: #156148;
-  font-style: italic;
-}
-
-/**/
-
-.battle-controls {
-  margin-top: 20px;
-  text-align: center;
-}
-
-.battle-controls h3 {
-  color: #ddd;
-  margin: 10px 0;
-}
-
-.attack-zones,
-.defense-zones {
-  margin-bottom: 15px;
-}
-
-.attack-zones button,
-.defense-zones button {
-  width: 70px;
-  height: 35px;
-
-  margin: 5px;
-
-  background: #333;
-  color: #ddd;
-
-  border: 1px solid #555;
-  border-radius: 5px;
-
-  cursor: pointer;
-}
-
-.selected {
-  background: #777 !important;
   color: white;
+
+  letter-spacing: 2px;
 }
 
-.battle-controls > button {
-  margin-top: 20px;
+/* */
 
-  width: 150px;
-  height: 45px;
+input {
+  width: 280px;
+
+  height: 40px;
+
+  padding: 10px;
+
+  margin: 15px;
 
   background: #222;
+
   color: white;
 
-  border: 1px solid #666;
+  border: 1px solid #555;
+
+  border-radius: 6px;
+
+  font-size: 16px;
+}
+
+/* */
+
+button {
+  height: 42px;
+
+  padding: 0 25px;
+
+  margin: 8px;
+
+  background: #222;
+
+  color: white;
+
+  border: 1px solid #555;
+
   border-radius: 8px;
 
   cursor: pointer;
+
+  transition: 0.2s;
 }
 
-.battle-controls button:hover {
+button:hover {
   background: #555;
 }
 
-/**/
+button:disabled {
+  opacity: 0.4;
+
+  cursor: not-allowed;
+}
+
+/* */
+
+.battle-container {
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  gap: 15px;
+}
 
 .fighters-container {
   display: flex;
+
   justify-content: center;
+
+  align-items: center;
+
   gap: 40px;
-  margin-bottom: 30px;
+
+  margin-bottom: 20px;
 }
 
 .fighter-card {
-  width: 220px;
+  width: 260px;
+
+  height: 390px;
 
   background: #222;
 
@@ -124,14 +155,27 @@
 
   padding: 20px;
 
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: flex-start;
+
   text-align: center;
 
   color: #ddd;
 }
 
 .fighter-card img {
-  width: 200px;
-  height: 200px;
+  width: 180px;
+
+  height: 180px;
+
+  object-fit: cover;
+
+  flex-shrink: 0;
 
   border-radius: 10%;
 
@@ -140,6 +184,7 @@
 
 .fighter-card h2 {
   margin: 10px 0;
+
   color: white;
 }
 
@@ -152,31 +197,214 @@
 }
 
 .vs {
-  display: flex;
-  align-items: center;
-
   font-size: 32px;
+
   font-weight: bold;
 
   color: #882828;
 }
 
-.avatar-button {
+/* */
+
+.health-track {
   width: 200px;
-  height: 200px;
+
+  height: 20px;
+
+  background: #333;
+
+  border-radius: 10px;
+
+  overflow: hidden;
+
+  margin: 10px auto;
+}
+
+.health-bar {
+  height: 100%;
+
+  background: #8b1c1c;
+}
+
+.health-text {
+  color: white;
+
+  font-size: 14px;
+}
+
+/* */
+
+.battle-log {
+  width: 500px;
+
+  height: 220px;
+
+  overflow-y: auto;
+
+  color: #fff;
+
+  background: #222;
+
+  border: 1px solid #444;
+
+  border-radius: 8px;
+
+  padding: 15px;
+}
+
+.battle-log h3 {
+  text-align: center;
+
+  margin-top: 0;
+}
+
+.log-entry {
+  margin-bottom: 8px;
+
+  color: #ddd;
+}
+
+.log-attacker {
+  color: white;
+
+  font-weight: bold;
+}
+
+.log-target {
+  color: #aaa;
+}
+
+.log-zone {
+  color: #777;
+
+  font-style: italic;
+}
+
+.log-damage {
+  color: white;
+
+  font-weight: bold;
+}
+
+.log-critical {
+  color: #b22222;
+
+  font-weight: bold;
+}
+
+.log-blocked {
+  color: #15805c;
+
+  font-style: italic;
+}
+
+/* */
+
+.battle-controls {
+  text-align: center;
+}
+
+.battle-controls h3 {
+  color: #ddd;
+
+  margin: 10px;
+}
+
+.attack-zones,
+.defense-zones {
+  margin-bottom: 15px;
+}
+
+.attack-zones button,
+.defense-zones button {
+  width: 75px;
+
+  height: 35px;
+
+  padding: 0;
+
+  background: #333;
+
+  color: #ddd;
+}
+
+.selected {
+  background: #777 !important;
+
+  color: white;
+}
+
+/* */
+
+.avatar {
+  width: 400px;
+  height: 300px;
+}
+
+.avatar-list {
+  display: flex;
+
+  justify-content: center;
+
+  gap: 15px;
+
+  margin: 20px 0;
+}
+
+.avatar-button {
+  width: 100px;
+
+  height: 100px;
+
+  padding: 5px;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
 
   background: #222;
 
   border: 1px solid #555;
+
+  border-radius: 10px;
+
+  overflow: hidden;
+}
+
+.avatar-button img {
+  width: 85px;
+
+  height: 85px;
+
+  object-fit: cover;
+
+  border-radius: 50%;
+}
+
+.avatar-button:hover {
+  border-color: white;
+}
+
+.main-menu-button {
+  margin-top: 15px;
+
+  width: 180px;
+
+  height: 45px;
+
+  background: #111;
+
+  color: white;
+
+  border: 1px solid #666;
 
   border-radius: 8px;
 
   cursor: pointer;
 }
 
-.avatar-button img {
-  width: 160px;
-  height: 160px;
-
-  border-radius: 1cqb;
+.main-menu-button:hover {
+  background: #555;
 }

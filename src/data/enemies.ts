@@ -2,7 +2,7 @@ import type { Enemy } from "../types";
 import { Zone } from "../types";
 import spider from "../assets/img/spider.jpg";
 import troll from "../assets/img/troll.jfif";
-import knight from "../assets/img/knight.jfif";
+import knight from "../assets/img/knight.jpg";
 
 export const enemies: Enemy[] = [
   {
