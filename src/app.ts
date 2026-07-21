@@ -1,27 +1,17 @@
 import { BattleEngine } from "./services/BattleEngine";
 import { enemies } from "./data/enemies";
 import { renderBattle } from "./components/BattleView";
+import { renderRegistration } from "./components/RegistrationView";
 import type { Player } from "./types";
 import type { BattleMove } from "./types";
 
 export class App {
   init(): void {
-    const player: Player = {
-      name: "Arthur",
-      avatar: "./assets/player.png",
+    let player: Player;
 
-      wins: 0,
-      losses: 0,
+    let engine: BattleEngine;
 
-      maxHP: 100,
-      damage: 20,
-    };
-
-    const engine = new BattleEngine(player, enemies);
-
-    const battle = engine.startBattle();
-
-    let currentBattle = battle;
+    let currentBattle;
 
     const root = document.createElement("div");
 
@@ -45,6 +35,20 @@ export class App {
       root.append(renderBattle(currentBattle, handleAttack, handleNewBattle));
     };
 
-    updateBattleView();
+    root.append(
+      renderRegistration((name) => {
+        ((player = {
+          name,
+          avatar: "./assets/player.png",
+          wins: 0,
+          losses: 0,
+          maxHP: 100,
+          damage: 20,
+        }),
+          (engine = new BattleEngine(player, enemies)));
+
+        currentBattle = engine.startBattle();
+      }),
+    );
   }
 }
