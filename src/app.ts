@@ -3,8 +3,8 @@ import { enemies } from "./data/enemies";
 import { renderBattle } from "./components/BattleView";
 import { renderRegistration } from "./components/RegistrationView";
 import { renderHome } from "./components/HomeView";
-import type { Player } from "./types";
-import type { BattleMove } from "./types";
+import { savePlayer, getPlayer } from "./services/Storage";
+import type { Player, BattleMove, Battle } from "./types";
 
 export class App {
   init(): void {
@@ -12,11 +12,13 @@ export class App {
 
     let engine: BattleEngine;
 
-    let currentBattle;
+    let currentBattle: Battle;
 
     const root = document.createElement("div");
 
     document.body.append(root);
+
+    const savedPlayer = getPlayer();
 
     const showScreen = (screen: HTMLElement) => {
       root.innerHTML = "";
@@ -48,22 +50,35 @@ export class App {
       updateBattleView();
     };
 
-    root.append(
-      renderRegistration((name) => {
-        ((player = {
-          name,
-          avatar: "./assets/player.png",
-          wins: 0,
-          losses: 0,
-          maxHP: 100,
-          damage: 20,
+    const loadPlayer = (playerData: Player) => {
+      player = playerData;
+
+      engine = new BattleEngine(player, enemies);
+
+      showScreen(renderHome(player.name, handleStartBattle));
+    };
+
+    if (savedPlayer) {
+      loadPlayer(savedPlayer);
+    } else {
+      showScreen(
+        renderRegistration((name) => {
+          player = {
+            name,
+            avatar: "./assets/player.png",
+            wins: 0,
+            losses: 0,
+            maxHP: 100,
+            damage: 20,
+          };
+
+          savePlayer(player);
+
+          engine = new BattleEngine(player, enemies);
+
+          showScreen(renderHome(player.name, handleStartBattle));
         }),
-          (engine = new BattleEngine(player, enemies)));
-
-        showScreen(renderHome(player.name, handleStartBattle));
-
-        currentBattle = engine.startBattle();
-      }),
-    );
+      );
+    }
   }
 }
