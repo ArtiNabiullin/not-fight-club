@@ -5,6 +5,7 @@ import { renderRegistration } from "./components/RegistrationView";
 import { renderHome } from "./components/HomeView";
 import { savePlayer, getPlayer } from "./services/Storage";
 import { renderCharacter } from "./components/CharacterView";
+import { renderSettings } from "./components/SettingsView";
 import type { Player, BattleMove, Battle } from "./types";
 
 export class App {
@@ -14,6 +15,8 @@ export class App {
     let engine: BattleEngine;
 
     let currentBattle: Battle;
+
+    let isResultSaved = false;
 
     const root = document.createElement("div");
 
@@ -27,8 +30,32 @@ export class App {
       root.append(screen);
     };
 
+    const updatePlayerStats = () => {
+      {
+        if (isResultSaved) {
+          return;
+        }
+
+        if (currentBattle.playerHp === 0) {
+          player.losses += 1;
+        }
+
+        if (currentBattle.enemyHp === 0) {
+          player.wins += 1;
+        }
+      }
+
+      isResultSaved = true;
+
+      savePlayer(player);
+    };
+
     const handleAttack = (move: BattleMove) => {
       currentBattle = engine.resolveTurn(move);
+
+      if (currentBattle.isFinished) {
+        updatePlayerStats();
+      }
 
       updateBattleView();
     };
@@ -46,9 +73,30 @@ export class App {
     };
 
     const handleStartBattle = () => {
+      isResultSaved = false;
+
       currentBattle = engine.startBattle();
 
       updateBattleView();
+    };
+
+    const handleSettings = () => {
+      showScreen(renderSettings(player, handleSaveName, handleBackHome));
+    };
+
+    const handleSaveName = (name: string) => {
+      player.name = name;
+
+      savePlayer(player);
+
+      showScreen(
+        renderHome(
+          player.name,
+          handleStartBattle,
+          handleCharacter,
+          handleSettings,
+        ),
+      );
     };
 
     const loadPlayer = (playerData: Player) => {
@@ -56,11 +104,25 @@ export class App {
 
       engine = new BattleEngine(player, enemies);
 
-      showScreen(renderHome(player.name, handleStartBattle, handleCharacter));
+      showScreen(
+        renderHome(
+          player.name,
+          handleStartBattle,
+          handleCharacter,
+          handleSettings,
+        ),
+      );
     };
 
     const handleBackHome = () => {
-      showScreen(renderHome(player.name, handleStartBattle, handleCharacter));
+      showScreen(
+        renderHome(
+          player.name,
+          handleStartBattle,
+          handleCharacter,
+          handleSettings,
+        ),
+      );
     };
 
     const handleChangeAvatar = (avatar: string) => {
@@ -94,7 +156,12 @@ export class App {
           engine = new BattleEngine(player, enemies);
 
           showScreen(
-            renderHome(player.name, handleStartBattle, handleCharacter),
+            renderHome(
+              player.name,
+              handleStartBattle,
+              handleCharacter,
+              handleSettings,
+            ),
           );
         }),
       );

@@ -2,6 +2,7 @@ export function renderHome(
   playerName: string,
   onStartBattle: () => void,
   onCharacter: () => void,
+  onSettings: () => void,
 ) {
   const container = document.createElement("div");
   container.className = "home";
@@ -15,18 +16,32 @@ export function renderHome(
   const startButton = document.createElement("button");
   startButton.textContent = "START BATTLE";
 
-  const characterButton = document.createElement("button");
-  characterButton.textContent = "CHARACTER";
-
   startButton.onclick = () => {
     onStartBattle();
   };
+
+  const characterButton = document.createElement("button");
+  characterButton.textContent = "CHARACTER";
 
   characterButton.onclick = () => {
     onCharacter();
   };
 
-  container.append(title, welcome, startButton, characterButton);
+  const settingsButton = document.createElement("button");
+
+  settingsButton.textContent = "SETTINGS";
+
+  settingsButton.onclick = () => {
+    onSettings();
+  };
+
+  container.append(
+    title,
+    welcome,
+    startButton,
+    characterButton,
+    settingsButton,
+  );
 
   return container;
 }
