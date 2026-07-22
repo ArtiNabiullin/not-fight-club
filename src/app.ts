@@ -7,6 +7,7 @@ import { savePlayer, getPlayer } from "./services/Storage";
 import { renderCharacter } from "./components/CharacterView";
 import { renderSettings } from "./components/SettingsView";
 import type { Player, BattleMove, Battle } from "./types";
+import avatar1 from "./assets/img/avatar1.jfif";
 
 export class App {
   init(): void {
@@ -35,12 +36,10 @@ export class App {
         return;
       }
 
-      if (currentBattle.playerHp === 0) {
-        player.losses += 1;
-      }
-
       if (currentBattle.enemyHp === 0) {
         player.wins += 1;
+      } else if (currentBattle.playerHp === 0) {
+        player.losses += 1;
       }
 
       lastFinishedBattle = currentBattle;
@@ -158,7 +157,7 @@ export class App {
         renderRegistration((name) => {
           player = {
             name,
-            avatar: "./assets/player.png",
+            avatar: avatar1,
             wins: 0,
             losses: 0,
             maxHP: 100,

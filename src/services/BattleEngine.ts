@@ -43,7 +43,6 @@ export class BattleEngine {
     return this.battle;
   }
 
-
   public resolveTurn(move: BattleMove): Battle {
     if (!this.battle) {
       throw new Error("Battle has not started");
@@ -194,17 +193,7 @@ export class BattleEngine {
       throw new Error("Battle has not started");
     }
 
-    if (this.battle.enemyHp === 0) {
-      this.battle.player.wins++;
-
-      this.battle.isFinished = true;
-
-      return;
-    }
-
-    if (this.battle.playerHp === 0) {
-      this.battle.player.losses++;
-
+    if (this.battle.enemyHp === 0 || this.battle.playerHp === 0) {
       this.battle.isFinished = true;
     }
   }
