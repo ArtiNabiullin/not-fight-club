@@ -6,6 +6,9 @@ import { createBattleLog } from "./BattleLog";
 export function renderBattle(
   battle: Battle,
   onAttack: (move: BattleMove) => void,
+  onNewBattle: () => void,
+  onMainMenu: () => void,
+  onMoveChange: (move: BattleMove) => void,
 ) {
   const container = document.createElement("div");
   container.className = "battle-container";
@@ -17,15 +20,55 @@ export function renderBattle(
 
   const playerCard = createFighterCard(battle.player, battle.playerHp);
 
-  fightersContainer.append(playerCard, enemyCard);
+  const vs = document.createElement("div");
+  vs.className = "vs";
+  vs.textContent = "VS";
+  fightersContainer.append(playerCard, vs, enemyCard);
 
   const log = createBattleLog(battle.log);
 
   container.append(fightersContainer, log);
 
-  const controls = createBattleControls(onAttack);
+  const controls = createBattleControls(
+    onAttack,
+    battle.playerMove,
+    onMoveChange,
+  );
 
-  container.append(controls);
+  const menuButton = document.createElement("button");
+  menuButton.className = "main-menu-button";
+  menuButton.textContent = "MAIN MENU";
+
+  menuButton.onclick = () => {
+    onMainMenu();
+  };
+
+  if (battle.isFinished) {
+    const button = controls.querySelector<HTMLButtonElement>(".attack-button");
+
+    if (button) {
+      if (battle.result === "draw") {
+        button.textContent = "Draw!";
+      } else if (battle.result === "loss") {
+        button.textContent = "You lost!";
+      } else if (battle.result === "win") {
+        button.textContent = "You won!";
+      }
+
+      button.disabled = true;
+    }
+
+    const newBattleButton = document.createElement("button");
+    newBattleButton.className = "new-battle-button";
+    newBattleButton.textContent = "New Battle";
+    newBattleButton.onclick = () => {
+      onNewBattle();
+    };
+
+    controls.append(newBattleButton);
+  }
+
+  container.append(controls, menuButton);
 
   return container;
 }

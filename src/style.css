@@ -1,6 +1,245 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+
+  background: #111;
+
+  color: #ddd;
+
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+#app,
+body > div {
+  width: 100%;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: flex-start;
+
+  padding-top: 10px;
+}
+
+/* */
+
+.registration,
+.home,
+.character,
+.settings {
+  width: 500px;
+
+  padding: 40px;
+
+  text-align: center;
+
+  background: #1b1b1b;
+
+  border: 1px solid #444;
+
+  border-radius: 12px;
+
+  box-shadow: 0 0 20px #000;
+}
+
+/* */
+
+.logo {
+  display: block;
+
+  margin: 0 auto 25px;
+
+  width: 180px;
+}
+
+h1 {
+  margin-bottom: 25px;
+
+  color: white;
+
+  letter-spacing: 2px;
+}
+
+/* */
+
+input {
+  width: 280px;
+
+  height: 40px;
+
+  padding: 10px;
+
+  margin: 15px;
+
+  background: #222;
+
+  color: white;
+
+  border: 1px solid #555;
+
+  border-radius: 6px;
+
+  font-size: 16px;
+}
+
+/* */
+
+button {
+  height: 42px;
+
+  padding: 0 25px;
+
+  margin: 8px;
+
+  background: #222;
+
+  color: white;
+
+  border: 1px solid #555;
+
+  border-radius: 8px;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+button:hover {
+  background: #555;
+}
+
+button:disabled {
+  opacity: 0.4;
+
+  cursor: not-allowed;
+}
+
+/* */
+
+.battle-container {
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  gap: 15px;
+}
+
+.fighters-container {
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  gap: 40px;
+
+  margin-bottom: 20px;
+}
+
+.fighter-card {
+  width: 260px;
+
+  height: 390px;
+
+  background: #222;
+
+  border: 1px solid #444;
+
+  border-radius: 10px;
+
+  padding: 20px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: flex-start;
+
+  text-align: center;
+
+  color: #ddd;
+}
+
+.fighter-card img {
+  width: 180px;
+
+  height: 180px;
+
+  object-fit: cover;
+
+  flex-shrink: 0;
+
+  border-radius: 10%;
+
+  margin-bottom: 10px;
+}
+
+.fighter-card h2 {
+  margin: 10px 0;
+
+  color: white;
+}
+
+.player-card {
+  border-color: #666;
+}
+
+.enemy-card {
+  border-color: #333;
+}
+
+.vs {
+  font-size: 32px;
+
+  font-weight: bold;
+
+  color: #882828;
+}
+
+/* */
+
+.health-track {
+  width: 200px;
+
+  height: 20px;
+
+  background: #333;
+
+  border-radius: 10px;
+
+  overflow: hidden;
+
+  margin: 10px auto;
+}
+
+.health-bar {
+  height: 100%;
+
+  background: #8b1c1c;
+}
+
+.health-text {
+  color: white;
+
+  font-size: 14px;
+}
+
+/* */
+
 .battle-log {
   width: 500px;
-  min-height: 220px;
+
+  height: 220px;
+
+  overflow-y: auto;
 
   color: #fff;
 
@@ -13,13 +252,21 @@
   padding: 15px;
 }
 
+.battle-log h3 {
+  text-align: center;
+
+  margin-top: 0;
+}
+
 .log-entry {
   margin-bottom: 8px;
+
   color: #ddd;
 }
 
 .log-attacker {
-  color: #fff;
+  color: white;
+
   font-weight: bold;
 }
 
@@ -29,34 +276,38 @@
 
 .log-zone {
   color: #777;
+
   font-style: italic;
 }
 
 .log-damage {
-  color: #fff;
+  color: white;
+
   font-weight: bold;
 }
 
 .log-critical {
-  color: rgb(139, 28, 28);
+  color: #b22222;
+
   font-weight: bold;
 }
 
 .log-blocked {
-  color: #156148;
+  color: #15805c;
+
   font-style: italic;
 }
 
-/**/
+/* */
 
 .battle-controls {
-  margin-top: 20px;
   text-align: center;
 }
 
 .battle-controls h3 {
   color: #ddd;
-  margin: 10px 0;
+
+  margin: 10px;
 }
 
 .attack-zones,
@@ -66,87 +317,94 @@
 
 .attack-zones button,
 .defense-zones button {
-  width: 70px;
+  width: 75px;
+
   height: 35px;
 
-  margin: 5px;
+  padding: 0;
 
   background: #333;
+
   color: #ddd;
-
-  border: 1px solid #555;
-  border-radius: 5px;
-
-  cursor: pointer;
 }
 
 .selected {
   background: #777 !important;
+
   color: white;
 }
 
-.battle-controls > button {
-  margin-top: 20px;
+/* */
 
-  width: 150px;
-  height: 45px;
+.avatar {
+  width: 400px;
+  height: 300px;
+}
+
+.avatar-list {
+  display: flex;
+
+  justify-content: center;
+
+  gap: 15px;
+
+  margin: 20px 0;
+}
+
+.avatar-button {
+  width: 100px;
+
+  height: 100px;
+
+  padding: 5px;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
 
   background: #222;
+
+  border: 1px solid #555;
+
+  border-radius: 10px;
+
+  overflow: hidden;
+}
+
+.avatar-button img {
+  width: 85px;
+
+  height: 85px;
+
+  object-fit: cover;
+
+  border-radius: 50%;
+}
+
+.avatar-button:hover {
+  border-color: white;
+}
+
+.main-menu-button {
+  margin-top: 15px;
+
+  width: 180px;
+
+  height: 45px;
+
+  background: #111;
+
   color: white;
 
   border: 1px solid #666;
+
   border-radius: 8px;
 
   cursor: pointer;
 }
 
-.battle-controls button:hover {
+.main-menu-button:hover {
   background: #555;
-}
-
-/**/
-
-.fighters-container {
-  display: flex;
-  justify-content: center;
-  gap: 40px;
-  margin-bottom: 30px;
-}
-
-.fighter-card {
-  width: 220px;
-
-  background: #222;
-
-  border: 1px solid #444;
-
-  border-radius: 10px;
-
-  padding: 20px;
-
-  text-align: center;
-
-  color: #ddd;
-}
-
-.fighter-card img {
-  width: 200px;
-  height: 200px;
-
-  border-radius: 10%;
-
-  margin-bottom: 10px;
-}
-
-.fighter-card h2 {
-  margin: 10px 0;
-  color: white;
-}
-
-.player-card {
-  border-color: #666;
-}
-
-.enemy-card {
-  border-color: #333;
 }
