@@ -13,7 +13,7 @@ export const enemies: Enemy[] = [
     attackProfile: [Zone.Neck, Zone.Belly, Zone.Legs],
     defenseProfile: [Zone.Body, Zone.Legs],
     attackCount: 2,
-    defenseCount: 2,
+    defenseCount: 1,
   },
   {
     name: "Troll",
@@ -23,7 +23,7 @@ export const enemies: Enemy[] = [
     attackProfile: [Zone.Head, Zone.Body, Zone.Neck, Zone.Belly],
     defenseProfile: [Zone.Head, Zone.Body, Zone.Neck],
     attackCount: 1,
-    defenseCount: 3,
+    defenseCount: 2,
   },
   {
     name: "Knight",
@@ -33,6 +33,6 @@ export const enemies: Enemy[] = [
     attackProfile: [Zone.Head, Zone.Body, Zone.Legs],
     defenseProfile: [Zone.Head, Zone.Belly, Zone.Legs],
     attackCount: 2,
-    defenseCount: 3,
+    defenseCount: 2,
   },
 ];
