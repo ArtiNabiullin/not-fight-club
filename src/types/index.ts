@@ -6,4 +6,5 @@ export type { BattleMove } from "./BattleMove";
 export type { DamageResult } from "./DamageResult";
 export type { HitResult } from "./HitResult";
 
+
 export { Zone } from "./Zone";

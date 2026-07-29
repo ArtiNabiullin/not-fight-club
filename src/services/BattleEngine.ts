@@ -34,12 +34,32 @@ export class BattleEngine {
       enemyHp: enemy.maxHp,
 
       turn: 1,
-
       log: [],
 
       isFinished: false,
+      result: null,
+      statsRecorded: false,
+
+      playerMove: {
+        attackZones: [],
+        defenseZones: [],
+      },
     };
 
+    return this.battle;
+  }
+
+  public restoreBattle(battle: Battle): Battle {
+    this.battle = {
+      ...battle,
+      player: this.player,
+      result: battle.result ?? null,
+      statsRecorded: battle.statsRecorded ?? false,
+      playerMove: battle.playerMove ?? {
+        attackZones: [],
+        defenseZones: [],
+      },
+    };
     return this.battle;
   }
 
@@ -47,6 +67,11 @@ export class BattleEngine {
     if (!this.battle) {
       throw new Error("Battle has not started");
     }
+
+    this.battle.playerMove = {
+      attackZones: [...move.attackZones],
+      defenseZones: [...move.defenseZones],
+    };
 
     const enemyMove = this.createEnemyMove();
 
@@ -193,8 +218,19 @@ export class BattleEngine {
       throw new Error("Battle has not started");
     }
 
-    if (this.battle.enemyHp === 0 || this.battle.playerHp === 0) {
+    const playerDead = this.battle.playerHp === 0;
+    const enemyDead = this.battle.enemyHp === 0;
+
+    if (playerDead || enemyDead) {
       this.battle.isFinished = true;
+
+      if (playerDead && enemyDead) {
+        this.battle.result = "draw";
+      } else if (enemyDead) {
+        this.battle.result = "win";
+      } else {
+        this.battle.result = "loss";
+      }
     }
   }
 }

@@ -3,7 +3,12 @@ import { enemies } from "./data/enemies";
 import { renderBattle } from "./components/BattleView";
 import { renderRegistration } from "./components/RegistrationView";
 import { renderHome } from "./components/HomeView";
-import { savePlayer, getPlayer } from "./services/Storage";
+import {
+  savePlayer,
+  getPlayer,
+  saveBattle,
+  getBattle,
+} from "./services/Storage";
 import { renderCharacter } from "./components/CharacterView";
 import { renderSettings } from "./components/SettingsView";
 import type { Player, BattleMove, Battle } from "./types";
@@ -16,8 +21,6 @@ export class App {
     let engine: BattleEngine;
 
     let currentBattle: Battle;
-
-    let lastFinishedBattle: Battle | null = null;
 
     const root = document.createElement("div");
 
@@ -32,19 +35,24 @@ export class App {
     };
 
     const updatePlayerStats = () => {
-      if (lastFinishedBattle === currentBattle) {
+      if (
+        !currentBattle.isFinished ||
+        currentBattle.statsRecorded ||
+        currentBattle.result === null
+      ) {
         return;
       }
 
-      if (currentBattle.enemyHp === 0) {
+      if (currentBattle.result === "win") {
         player.wins += 1;
-      } else if (currentBattle.playerHp === 0) {
+      } else if (currentBattle.result === "loss") {
         player.losses += 1;
       }
 
-      lastFinishedBattle = currentBattle;
+      currentBattle.statsRecorded = true;
 
       savePlayer(player);
+      saveBattle(currentBattle);
     };
 
     const handleAttack = (move: BattleMove) => {
@@ -54,7 +62,17 @@ export class App {
         updatePlayerStats();
       }
 
+      saveBattle(currentBattle);
       updateBattleView();
+    };
+
+    const handleMoveChange = (move: BattleMove) => {
+      currentBattle.playerMove = {
+        attackZones: [...move.attackZones],
+        defenseZones: [...move.defenseZones],
+      };
+
+      saveBattle(currentBattle);
     };
 
     const handleMainMenu = () => {
@@ -70,6 +88,7 @@ export class App {
 
     const handleNewBattle = () => {
       currentBattle = engine.startBattle();
+      saveBattle(currentBattle);
 
       updateBattleView();
     };
@@ -83,12 +102,14 @@ export class App {
           handleAttack,
           handleNewBattle,
           handleMainMenu,
+          handleMoveChange,
         ),
       );
     };
 
     const handleStartBattle = () => {
       currentBattle = engine.startBattle();
+      saveBattle(currentBattle);
 
       updateBattleView();
     };
@@ -113,9 +134,20 @@ export class App {
     };
 
     const loadPlayer = (playerData: Player) => {
-      player = playerData;
+      player = {
+        ...playerData,
+        avatar: playerData.avatar || avatar1,
+      };
 
       engine = new BattleEngine(player, enemies);
+
+      const savedBattle = getBattle();
+
+      if (savedBattle && !savedBattle.isFinished) {
+        currentBattle = engine.restoreBattle(savedBattle);
+        updateBattleView();
+        return;
+      }
 
       showScreen(
         renderHome(
